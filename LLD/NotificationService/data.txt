@@ -1,0 +1,9 @@
+
+userId: ankit-123; medium:slackNotification(data=sample notification sent to apps, serviceName=notification sytem)
+userId: ankit-123; medium:WhatsappNotification(data=sample notification sent to apps, serviceName=notification sytem)
+userId: bhakesh-123; medium:slackNotification(data=sample notification sent to apps, serviceName=notification sytem)
+userId: bhakesh-123; medium:WhatsappNotification(data=sample notification sent to apps, serviceName=notification sytem)
+userId: rakesh-123; medium:slackNotification(data=sample notification sent to apps, serviceName=notification sytem)
+userId: rakesh-123; medium:WhatsappNotification(data=sample notification sent to apps, serviceName=notification sytem)
+userId: mohnish-123; medium:slackNotification(data=sample notification sent to apps, serviceName=notification sytem)
+userId: mohnish-123; medium:WhatsappNotification(data=sample notification sent to apps, serviceName=notification sytem)
