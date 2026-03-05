@@ -1,4 +1,19 @@
 package com.example.NotificationService.Models.Notifier;
 
-public class WhatsappNotifier {
+import com.example.NotificationService.Models.Notification;
+import com.example.NotificationService.Utils.FileProcessor;
+
+import java.io.IOException;
+
+public class WhatsappNotifier extends AbstractNotifier {
+
+    public WhatsappNotifier(FileProcessor processor) {
+        super(processor);
+    }
+
+    public void notify(String userId,  Notification notification) throws IOException {
+        String medium = "Whatsapp";
+        String message = "userId: "+userId+"; medium:" + medium+ notification.toString();
+        this.processor.processMessage(message);
+    }
 }
