@@ -2,9 +2,11 @@ package com.example.NotificationService.Models.Notifier;
 
 import com.example.NotificationService.Models.Notification;
 import com.example.NotificationService.Utils.FileProcessor;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class WhatsappNotifier extends AbstractNotifier {
 
     public WhatsappNotifier(FileProcessor processor) {

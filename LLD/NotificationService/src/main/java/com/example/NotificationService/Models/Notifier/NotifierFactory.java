@@ -13,10 +13,10 @@ public class NotifierFactory {
     WhatsappNotifier whatsappNotifier;
     FileProcessor processor;
 
-    public NotifierFactory(FileProcessor processor) {
-        this.emailNotifier = new EmailNotifier(processor);
-        this.slackNotifier = new SlackNotifier(processor);
-        this.whatsappNotifier = new WhatsappNotifier(processor);
+    public NotifierFactory(EmailNotifier emailNotifier, SlackNotifier slackNotifier, WhatsappNotifier whatsappNotifier) {
+        this.emailNotifier = emailNotifier;
+        this.slackNotifier = slackNotifier;
+        this.whatsappNotifier = whatsappNotifier;
     }
 
     public AbstractNotifier getObject(NotificationChannels type) {

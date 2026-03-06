@@ -24,20 +24,12 @@ public class NotificationRepository {
             Set<String> st = new HashSet<>();
             st.add(userId);
             return st;
-        });
-        notfnTypeUsersMapping.computeIfPresent(type, (key,value) -> {
-            value.add(userId);
-            return value;
-        });
+        }).add(userId);
         // interleaving can happen lock can be used, skipping for now. The new channels can be added, older one will be there.
         userIdChannelsMapping.computeIfAbsent(userId, key -> {
             Set<NotificationChannels> st = new HashSet<>(channels);
             return st;
-        });
-        userIdChannelsMapping.computeIfPresent(userId, (key,value) -> {
-            value.addAll(channels);
-            return value;
-        });
+        }).addAll(channels);
     }
     // limtitation that userId, last update will be used to send the data to specific channels.
 
@@ -57,6 +49,9 @@ public class NotificationRepository {
     }
 
     public List<NotificationChannels> channelsForUser(String userId) {
+        if(!this.userIdChannelsMapping.containsKey(userId)) {
+            return new ArrayList<>();
+        }
         return this.userIdChannelsMapping.get(userId).stream().toList();
     }
 }

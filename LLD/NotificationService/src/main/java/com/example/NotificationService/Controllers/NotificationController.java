@@ -17,8 +17,7 @@ public class NotificationController {
         this.service = service;
     }
 
-    @PostMapping
-    @RequestMapping("/subscribe")
+    @PostMapping("/subscribe")
     public ResponseEntity<SubscriptionResponse> subscribe(@RequestBody  SubscriptionRequest request) {
         try {
             SubscriptionResponse response = this.service.subscribe(request);
@@ -29,8 +28,7 @@ public class NotificationController {
         }
     }
 
-    @PostMapping
-    @RequestMapping("/unsubscribe")
+    @PostMapping("/unsubscribe")
     public ResponseEntity<UnsubscribeResponse> unsubscribe(@RequestBody UnSubscribeRequest request) {
         try {
             UnsubscribeResponse response = this.service.unsubscribe(request);
@@ -41,8 +39,7 @@ public class NotificationController {
         }
     }
 
-    @GetMapping
-    @RequestMapping("/users")
+    @GetMapping("/users")
     public ResponseEntity<List<String>> getUsers(@RequestParam(required = true) NotificationType type) {
         try {
             List<String> users = service.getUsers(type);
@@ -53,8 +50,7 @@ public class NotificationController {
         }
     }
 
-    @PostMapping
-    @RequestMapping("/notify")
+    @PostMapping("/notify")
     public ResponseEntity<NotificationResponse> notify(@RequestBody NotificationRequest request) {
         try {
             NotificationResponse response = service.notify(request);
