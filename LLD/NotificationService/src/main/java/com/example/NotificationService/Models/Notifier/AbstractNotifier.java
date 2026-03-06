@@ -11,5 +11,5 @@ public abstract class AbstractNotifier {
         this.processor = processor;
     }
 
-    public  add abstract void notify(String userId, Notification notification) throws IOException;
+    public abstract void notify(String userId, Notification notification) throws IOException;
 }
