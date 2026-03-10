@@ -56,3 +56,5 @@ FixedWindowAlgo implements IRateLimiterAlgo
 
 Implementation:
 
+1. the main thing to note is clientid specific config in each class
+2. use of concurrent hash map in the code to ensure concurrency is working fine. 

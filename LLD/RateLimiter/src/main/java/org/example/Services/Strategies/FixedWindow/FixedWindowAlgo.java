@@ -1,57 +1,65 @@
 package org.example.Services.Strategies.FixedWindow;
 
-import com.sun.net.httpserver.Request;
 import org.example.Entities.ApiRequest;
 import org.example.Entities.ApiResponse;
 import org.example.Services.Strategies.IRateLimiterAlgo;
 import org.example.Services.Strategies.RateLimiterConfig;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class FixedWindowAlgo implements IRateLimiterAlgo {
-    int countPerMinute;
-    long currTime;
-    int currCount;
+    private final int countPerMinute;
+    private final ConcurrentHashMap<String, ClientState> clientStates = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ReentrantLock> clientLocks = new ConcurrentHashMap<>();
+
+    private static class ClientState {
+        int currCount;
+        long currTime;
+
+        ClientState(int countPerMinute) {
+            this.currCount = countPerMinute;
+            this.currTime = System.currentTimeMillis();
+        }
+    }
 
     public FixedWindowAlgo(RateLimiterConfig config) {
         this.countPerMinute = config.getTotalRequestsPerMinute();
-        currTime = System.currentTimeMillis();
-        this.currCount = countPerMinute;
     }
 
     public ApiResponse isRequestAllowed(ApiRequest request) {
-        long now = System.currentTimeMillis();
-        long minuteDiff = (now-currTime)/60000;
-        if(minuteDiff>=1) {
-            currCount = countPerMinute;
-            currCount-=1;
-            currTime = now;
-            return ApiResponse.builder()
-                    .isAllowed(true)
-                    .retryAfterMillis(0)
-                    .allowedRequestsLimit(currCount)
-                    .endpoint(request.getEndpoint())
-                    .clientId(request.getClientId())
-                    .build();
-        }
-        else {
-            if(currCount>0) {
-                currCount-=1;
+        String clientId = request.getClientId();
+        ClientState state = clientStates.computeIfAbsent(clientId, k -> new ClientState(countPerMinute));
+        ReentrantLock lock = clientLocks.computeIfAbsent(clientId, k -> new ReentrantLock());
+
+        lock.lock();
+        try {
+            long now = System.currentTimeMillis();
+            long minuteDiff = (now - state.currTime) / 60000;
+            if (minuteDiff >= 1) {
+                state.currCount = countPerMinute;
+                state.currTime = now;
+            }
+            if (state.currCount > 0) {
+                state.currCount -= 1;
                 return ApiResponse.builder()
                         .isAllowed(true)
                         .retryAfterMillis(0)
-                        .allowedRequestsLimit(currCount)
+                        .allowedRequestsLimit(state.currCount)
                         .endpoint(request.getEndpoint())
-                        .clientId(request.getClientId())
+                        .clientId(clientId)
                         .build();
-            }
-            else {
+            } else {
                 return ApiResponse.builder()
                         .isAllowed(false)
-                        .retryAfterMillis(60000+currTime-now)
+                        .retryAfterMillis(60000 + state.currTime - now)
                         .allowedRequestsLimit(0)
                         .endpoint(request.getEndpoint())
-                        .clientId(request.getClientId())
+                        .clientId(clientId)
                         .build();
             }
+        } finally {
+            lock.unlock();
         }
     }
 }
