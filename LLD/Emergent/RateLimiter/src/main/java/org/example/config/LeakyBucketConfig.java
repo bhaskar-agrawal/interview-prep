@@ -2,9 +2,7 @@ package org.example.config;
 
 import org.example.entities.RateLimitAlgo;
 
-import javax.swing.plaf.ButtonUI;
-
-public class LeakyBucketConfig extends  RateLimiterConfig{
+public class LeakyBucketConfig extends RateLimiterConfig{
     int leaksPerSecond;
     int maxBucketSize;
 
@@ -32,8 +30,8 @@ public class LeakyBucketConfig extends  RateLimiterConfig{
             return this;
         }
 
-        public Builder leaksPerMinute(int leaksPerSecond) {
-            this.leaksPerSecond =leaksPerSecond;
+        public Builder leaksPerSecond(int leaksPerSecond) {
+            this.leaksPerSecond = leaksPerSecond;
             return this;
         }
 

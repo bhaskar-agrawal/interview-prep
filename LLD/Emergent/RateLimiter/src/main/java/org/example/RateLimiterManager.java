@@ -4,15 +4,12 @@ import org.example.config.RateLimiterConfig;
 import org.example.entities.Request;
 import org.example.rateLimitingAlgos.RateLimitAlgoBase;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RateLimiterManager {
     Map<String, RateLimitAlgoBase> endpointAlgoMap;
-    Lock lock = new ReentrantLock();
-    static RateLimiterManager instance=null;
+    static volatile RateLimiterManager instance=null;
 
     public static RateLimiterManager getInstance() {
         if(instance==null) {
@@ -26,7 +23,7 @@ public class RateLimiterManager {
     }
 
     private RateLimiterManager() {
-        this.endpointAlgoMap = new HashMap<>();
+        this.endpointAlgoMap = new ConcurrentHashMap<>();
     }
 
     public void addAlgoConfig(RateLimiterConfig config) {

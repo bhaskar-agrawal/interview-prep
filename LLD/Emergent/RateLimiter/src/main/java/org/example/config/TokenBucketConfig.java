@@ -6,7 +6,7 @@ public class TokenBucketConfig extends RateLimiterConfig{
 
     int tokensPerMinute;
     int maxTokens;
-    public static Builder builder;
+
     private TokenBucketConfig(Builder builder) {
         super(builder.endpoint, RateLimitAlgo.TOKEN_BUCKET);
         this.tokensPerMinute = builder.tokensPerMinute;
@@ -25,19 +25,22 @@ public class TokenBucketConfig extends RateLimiterConfig{
         String endpoint;
         int maxBucketSize;
         int tokensPerMinute;
-        void addEndpoint(String endpoint) {
-            this.endpoint= endpoint;
+        public Builder addEndpoint(String endpoint) {
+            this.endpoint = endpoint;
+            return this;
         }
 
-        void addTokensPerMinute(int tokensPerMinute) {
+        public Builder addTokensPerMinute(int tokensPerMinute) {
             this.tokensPerMinute = tokensPerMinute;
+            return this;
         }
 
-        void addMaxBucketSize(int maxBucketSize) {
+        public Builder addMaxBucketSize(int maxBucketSize) {
             this.maxBucketSize = maxBucketSize;
+            return this;
         }
 
-        TokenBucketConfig build() {
+        public TokenBucketConfig build() {
             return new TokenBucketConfig(this);
         }
     }
